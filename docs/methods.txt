@@ -1,0 +1,20 @@
+Image Processing
+
+Data Review
+Describe process used to obtain lesion maps.
+Describe quality review process for data exclusion and template creation?
+
+Template-building
+The ANTs toolkit was used to process all structural images. This pipeline requires a template and corresponding spatial priors so a subset of images was chosen to create this template. All images were manually reviewed to exclude images with excessive motion artifact. From the remaining images, 20 control images (7 female, 13 male) and 20 patient images (8 female, 12 male) were used to build a custom template using 'antsMultivariateTemplateConstruction' along with the following parameters: 3 levels of registration with 30x50x20 iterations at each level respectively; the Greedy-SyN transformation model; and the cross correlation (CC) image metric. The spatial priors for this template were then initialized using 'antsCookTemplatePriors' along with a publicly available template with existing priors [Cite OASIS template location].
+
+Cortical Thickness estimation
+Each subject's images were then processed with the appropriate ANTs-based tool to obtain a mapping to template space and an estimate of cortical thickness. For subjects with a single time point, 'antsCorticalThickness' was used [Tustison et al., 2014]. For subjects with multiple time points, 'antsLongitudinalCorticalThickess' was used. The longitudinal version of the pipeline creates a subject specific template (SST) from all of the subject's time points. The SST is used as input to 'antsCorticalThickness' to obtain spatial priors in the SST space. The SST and corresponding spatial priors are then used along with 'antsCorticalThickness' to process each individual time point.  This extra step of creating the SST is intended to help produce an unbiased subject-to-template spatial mapping across time points.  For all subject's with visible lesions (FIXME - describe this process earlier?), the lesion mask was used as an exclusion mask for the subject-to-template image registration stage [Avants/Hoon et al., ????]. 
+
+Cortical Labeling
+To obtain a set of regional labels for each subjects 'antsJointLabelFusion' was used along with the publicly available OASIS labels [CITE]. This tools uses a set of atlas images and corresponding labels to label a target image [Wang et al., 2013].  A longitudinal variant of the tools was created [point to github] to take advantage of the SSTs created in the cortical thickness pipeline described above. The longitudinal version labels the SST using the standard 'antsJointLabelFusion' and then propagates both labels and atlas images to each time point space using the transforms defined in the creation of the SST. The joint label fusion then occurs in the time point space using the standard technique.
+
+
+
+Tustison et al. Large-scale evaluation of ANTs and Freesurfer cortical thickness measurements. NeuroImage 2014.
+
+Wang H, Suh JW, Das SR, Pluta J, Craige C, Yushkevich PA. Multi-Atlas Segmentation with Joint Label Fusion. IEEE Trans Pattern Anal Mach Intell.
