@@ -2,7 +2,7 @@ Image Processing
 
 Data Review
 Describe process used to obtain lesion maps.
-Describe quality review process for data exclusion and template creation?
+Describe quality review process for data exclusion and template creation? Time points with excessive motion artifacts on T1 were identified for exclusion from later analysis. As a result, one control subject's data was excluded. In addition, 4 patients' first time point, one from 2nd time point and one from the 3rd were also excluded for the same reason.
 
 Template-building
 The ANTs toolkit was used to process all structural images. This pipeline requires a template and corresponding spatial priors so a subset of images was chosen to create this template. All images were manually reviewed to exclude images with excessive motion artifact. From the remaining images, 20 control images (7 female, 13 male) and 20 patient images (8 female, 12 male) were used to build a custom template using 'antsMultivariateTemplateConstruction' along with the following parameters: 3 levels of registration with 30x50x20 iterations at each level respectively; the Greedy-SyN transformation model; and the cross correlation (CC) image metric. The spatial priors for this template were then initialized using 'antsCookTemplatePriors' along with a publicly available template with existing priors [Cite OASIS template location].
